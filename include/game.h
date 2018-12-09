@@ -2,28 +2,6 @@
 
 #include "tetris.h"
 
-static const int GRID_WIDTH = 11;
-static const int GRID_HEIGHT = 24;
-
-static struct Game {
-	s8 active_piece_ID;
-	Tetromino* active_piece_ptr;
-	bool piece_locking;
-	bool piece_falling;
-	bool game_over;
-	u32 grid[25][12];
-} Game;
-
-//puts the color of a piece as the relevent elements of the piece, makes changing shapes easier
-void setupPiece(Tetromino *piece)
-{
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			piece->shape[i][j] *= piece->color;
-		}
-	}
-}
-
 // sets grid to be a defined color as well as have a border for collision detection purposes
 void setupGrid()
 {
@@ -130,20 +108,9 @@ void itoa(unsigned int input, char string[])
 
 }
 
-int sgn(int val) {
-    return ((0 < val) - (val < (0)));
-}
-
 //very quick and efficient PRNG algorithm
 int quickrand(int x)
 {
 	return x + ((x * x) | 5);
 }
 
-int abs(int value)
-{
-    u32 temp = value >> 31;     // make a mask of the sign bit
-    value ^= temp;                   // toggle the bits if value is negative
-    value += temp & 1;               // add one if value was negative
-    return value;
-}

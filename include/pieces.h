@@ -2,111 +2,17 @@
 
 #include "tetris.h"
 
-static const u8 PIECE_START_X_POSITION = 4;
-static const u8 PIECE_START_Y_POSITION = 0;
 
-typedef struct {
-	unsigned short shape[4][4];
-	short pos_x;
-	short pos_y;
-	short color;
-	short shadow;
-	short pos_s;
-}Tetromino;
+//puts the color of a piece as the relevent elements of the piece, makes changing shapes easier
+void setupPiece(Tetromino *piece)
+{
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			piece->shape[i][j] *= piece->color;
+		}
+	}
+}
 
-	//declaration of all tetrominos, they are static to ensure functions in the header can edit values
-	static Tetromino I =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 1, 1, 1, 1 },
-		    { 0, 0, 0, 0 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		I_PIECE_COLOR,          //color
-		I_SHADOW_COLOR,         //shadow
-		0
-	};
-
-	static Tetromino L =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 0, 0, 1, 0 },
-		    { 1, 1, 1, 0 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		L_PIECE_COLOR,          //color
-		L_SHADOW_COLOR,         //shadow
-		0
-	};
-
-	static Tetromino O =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 0, 1, 1, 0 },
-		    { 0, 1, 1, 0 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		O_PIECE_COLOR,          //color
-		O_SHADOW_COLOR,         //shadow
-		0
-	};
-
-	static Tetromino S =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 0, 1, 1, 0 },
-		    { 1, 1, 0, 0 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		S_PIECE_COLOR,          //color
-		S_SHADOW_COLOR,         //shadow
-		0
-	};
-
-	static Tetromino T =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 1, 1, 1, 0 },
-		    { 0, 1, 0, 0 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		T_PIECE_COLOR,          //color
-		T_SHADOW_COLOR,         //shadow
-		0
-	};
-
-	static Tetromino J =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 0, 1, 0, 0 },
-		    { 0, 1, 1, 1 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		J_PIECE_COLOR,          //color
-		J_SHADOW_COLOR,         //shadow
-		0
-	};
-
-	static Tetromino Z =
-	{
-		{ { 0, 0, 0, 0 },
-		    { 1, 1, 0, 0 },
-		    { 0, 1, 1, 0 },
-		    { 0, 0, 0, 0 } },   //shape
-		0,                      //pos_x
-		0,                      //pos_y
-		Z_PIECE_COLOR,          //color
-		Z_SHADOW_COLOR,         //shadow
-		0
-	};
-
-    
 //puts a piece on the grid, or takes it out of the grid if erase_mode is true
 void drawPiece(Tetromino *piece, bool erase_mode)
 {
@@ -135,7 +41,7 @@ void drawPiece(Tetromino *piece, bool erase_mode)
 }
 
 //tries lowers a piece one block, if it can't, it begins locking, if it can it draws the result
-void drop(Tetromino *piece)
+void pieceDrop(Tetromino *piece)
 {
 
         //first we erase the piece where it was
@@ -177,16 +83,16 @@ void drop(Tetromino *piece)
 }
 
 //drops the piece as low as it can by watching the falling flag
-void hard_drop(Tetromino *piece)
+void pieceHardDrop(Tetromino *piece)
 {
 	while (Game.piece_falling) {
-		drop(piece);
+		pieceDrop(piece);
 	}
 }
 
 
 //
-static void draw_shadow(Tetromino *piece, bool erase) {
+static void drawShadow(Tetromino *piece, bool erase) {
 	Tetromino temp;
 
 	for (int i = 0; i < 4; i++) {
@@ -199,7 +105,7 @@ static void draw_shadow(Tetromino *piece, bool erase) {
 	temp.pos_y = piece->pos_y;
 	temp.color = piece->shadow;
 	temp.shadow = 0;
-	piece_setup(&temp);
+	setupPiece(&temp);
 
 	if(erase && Game.piece_falling) {
 		temp.pos_y = piece->pos_s;
@@ -208,7 +114,7 @@ static void draw_shadow(Tetromino *piece, bool erase) {
 
 	drawPiece(piece,true);
 	drawPiece(&temp,false);
-	hard_drop(&temp);
+	pieceHardDrop(&temp);
 
 	Game.piece_falling = true;
 	Game.piece_locking = false;
@@ -250,14 +156,14 @@ void spawn(Tetromino *piece)
 	Game.piece_falling = true;
 
 	drawPiece(piece, false);
-	draw_shadow(piece, false);
+	drawShadow(piece, false);
 }
 
 //tries to move the piece right with a routine very similar to the drop routine above
 bool moveRight(Tetromino *piece)
 {
 	if (Game.piece_falling) {
-		draw_shadow(piece, true);
+		drawShadow(piece, true);
 	}
 	drawPiece(piece, true);
 	piece->pos_x++;
@@ -274,7 +180,7 @@ bool moveRight(Tetromino *piece)
 				drawPiece(piece, false);
 
 				if (Game.piece_falling) {
-					draw_shadow(piece, false);
+					drawShadow(piece, false);
 				}
 
 				return false;
@@ -284,7 +190,7 @@ bool moveRight(Tetromino *piece)
 	}
 
 	if (Game.piece_falling) {
-		draw_shadow(piece,false);
+		drawShadow(piece,false);
 	}
 
 	return true;
@@ -294,7 +200,7 @@ bool moveRight(Tetromino *piece)
 bool moveLeft(Tetromino *piece)
 {
 	if(Game.piece_falling) {
-		draw_shadow(piece, true);
+		drawShadow(piece, true);
 	}
 	drawPiece(piece, true);
 	piece->pos_x--;
@@ -310,7 +216,7 @@ bool moveLeft(Tetromino *piece)
 				piece->pos_x++;
 				drawPiece(piece, false);
 				if (Game.piece_falling) {
-					draw_shadow(piece, false);
+					drawShadow(piece, false);
 				}
 				return false;
 
@@ -318,22 +224,22 @@ bool moveLeft(Tetromino *piece)
 		}
 	}
 		if (Game.piece_falling) {
-			draw_shadow(piece, false);
+			drawShadow(piece, false);
 		}
 	return true;
 }
 
 //makes sure the piece is actually at the bottom by trying to drop it first, then locks the piece
-void lock(Tetromino *piece)
+void pieceLock(Tetromino *piece)
 {
-        drop(piece);
+        pieceDrop(piece);
 
         if (Game.piece_locking) {
 		piece->pos_s = piece->pos_y;
                 Game.active_piece_ID = 0;
         	Game.piece_locking = false;
         } else {
-		draw_shadow(piece,false);
+		drawShadow(piece,false);
 	}
 
 }
@@ -355,7 +261,7 @@ void rotate(Tetromino *piece)
 	short y1 = piece->pos_y, y2 = y1 + 4;
 
 	if (Game.piece_falling) {
-		draw_shadow(piece, true);
+		drawShadow(piece, true);
 	}
 
 	drawPiece(piece, true);
@@ -380,7 +286,7 @@ void rotate(Tetromino *piece)
 				drawPiece(&temp, true);
 				drawPiece(piece, false);
 				if (Game.piece_falling) {
-					draw_shadow(piece, false);
+					drawShadow(piece, false);
 				}
 				return;
 			}
@@ -395,6 +301,6 @@ void rotate(Tetromino *piece)
 	}
 
 	if (Game.piece_falling) {
-		draw_shadow(piece, false);
+		drawShadow(piece, false);
 	}
 }

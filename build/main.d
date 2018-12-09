@@ -1,5 +1,5 @@
-main.o: C:/Users/cravers/projects/switch_graphics_testing/source/main.c \
- c:\users\cravers\projects\switch_graphics_testing\include\tetris.h \
+main.o: C:/Users/arades/projects/TetriSwitch/source/main.c \
+ C:/Users/arades/projects/TetriSwitch/include/tetris.h \
  C:/tools/msys64/opt/devkitpro/libnx/include/switch.h \
  C:/tools/msys64/opt/devkitpro/libnx/include/switch/types.h \
  C:/tools/msys64/opt/devkitpro/libnx/include/switch/result.h \
@@ -84,12 +84,13 @@ main.o: C:/Users/cravers/projects/switch_graphics_testing/source/main.c \
  C:/tools/msys64/opt/devkitpro/libnx/include/switch/runtime/devices/fs_dev.h \
  C:/tools/msys64/opt/devkitpro/libnx/include/switch/runtime/devices/romfs_dev.h \
  C:/tools/msys64/opt/devkitpro/libnx/include/switch/runtime/devices/socket.h \
- c:\users\cravers\projects\switch_graphics_testing\include\pieces.h \
- c:\users\cravers\projects\switch_graphics_testing\include\controls.h \
- c:\users\cravers\projects\switch_graphics_testing\include\graphics.h \
- c:\users\cravers\projects\switch_graphics_testing\include\game.h
+ C:/Users/arades/projects/TetriSwitch/include/types.h \
+ C:/Users/arades/projects/TetriSwitch/include/pieces.h \
+ C:/Users/arades/projects/TetriSwitch/include/controls.h \
+ C:/Users/arades/projects/TetriSwitch/include/graphics.h \
+ C:/Users/arades/projects/TetriSwitch/include/game.h
 
-c:\users\cravers\projects\switch_graphics_testing\include\tetris.h:
+C:/Users/arades/projects/TetriSwitch/include/tetris.h:
 
 C:/tools/msys64/opt/devkitpro/libnx/include/switch.h:
 
@@ -259,10 +260,12 @@ C:/tools/msys64/opt/devkitpro/libnx/include/switch/runtime/devices/romfs_dev.h:
 
 C:/tools/msys64/opt/devkitpro/libnx/include/switch/runtime/devices/socket.h:
 
-c:\users\cravers\projects\switch_graphics_testing\include\pieces.h:
+C:/Users/arades/projects/TetriSwitch/include/types.h:
 
-c:\users\cravers\projects\switch_graphics_testing\include\controls.h:
+C:/Users/arades/projects/TetriSwitch/include/pieces.h:
 
-c:\users\cravers\projects\switch_graphics_testing\include\graphics.h:
+C:/Users/arades/projects/TetriSwitch/include/controls.h:
 
-c:\users\cravers\projects\switch_graphics_testing\include\game.h:
+C:/Users/arades/projects/TetriSwitch/include/graphics.h:
+
+C:/Users/arades/projects/TetriSwitch/include/game.h:

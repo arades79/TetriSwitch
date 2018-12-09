@@ -1,17 +1,17 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "SwitchDev",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/tools/msys64/**"
+                "C:/tools/msys64/opt/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "intelliSenseMode": "msvc-x64"
+            "intelliSenseMode": "gcc-x64"
         }
     ],
     "version": 4

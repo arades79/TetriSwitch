@@ -1,12 +1,7 @@
 
 
-#include "../include/tetris.h"
+#include "tetris.h"
 
-#ifdef DISPLAY_IMAGE
-#include "image_bin.h"//Your own raw RGB888 1280x720 image at "data/image.bin" is required.
-#endif
-
-//See also libnx gfx.h.
 
 int main(int argc, char **argv)
 {

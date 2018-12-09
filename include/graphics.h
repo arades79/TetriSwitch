@@ -2,66 +2,24 @@
 
 #include "tetris.h"
 
-
-static const u32 GRID_X_POS = 100;
-static const u32 GRID_Y_POS = 100;
-
-typedef enum  TetrisColor
-{
-    GAME_COLOR = RGBA8_MAXALPHA(0, 0, 0),
-    FRAME_COLOR = RGBA8_MAXALPHA(1, 1, 1),
-    OUTLINE_COLOR_1 = 0b1011110111110111,
-    OUTLINE_COLOR_2 = RGBA8_MAXALPHA(255, 255, 255),
-    BACKGROUND_COLOR = 0x3ACE,
-    TITLE_WHITE = RGBA8_MAXALPHA(255, 255, 255),
-    TITLE_GRAY = 0x41E8,
-
-    I_PIECE_COLOR = 0b0111100010000100,
-    L_PIECE_COLOR = 0b0001111011100011,
-    O_PIECE_COLOR = 0b0001100111110111,
-    S_PIECE_COLOR = 0b0111100111100100,
-    T_PIECE_COLOR = 0b0000011011110111,
-    J_PIECE_COLOR = 0b0111100001110111,
-    Z_PIECE_COLOR = 0b0111101011110111,
-
-    I_SHADOW_COLOR = 0b0010000000000000,
-    L_SHADOW_COLOR = 0b0000000100000000,
-    O_SHADOW_COLOR = 0b0000000000000100,
-    S_SHADOW_COLOR = 0b0010000010000000,
-    T_SHADOW_COLOR = 0b0000000010000100,
-    J_SHADOW_COLOR = 0b0010000000000100,
-    Z_SHADOW_COLOR = 0b0010000010000100,
-
-    COLOR_GRADIENT = RGBA8_MAXALPHA(1, 1, 1)
-} TetrisColor;
-
-typedef struct Point
-{
-    u32 x;
-    u32 y;
-} Point;
-
-typedef struct Line
-{
-    Point p1;
-    Point p2;
-} Line;
-
-typedef Line Rectangle;
-
-typedef struct Screen
-{
-    u32 height;
-    u32 width;
-    u32 * buffer;
-} Screen;
-
 //Write a pixel to a defined x and y position to a defined color
 static void drawPixel(Point* point, TetrisColor color, Screen* active_screen)
 {
     u32 pos = (point->y * active_screen->width) + point->x;
 	u32* pixel_buffer = (u32*)(active_screen->buffer + pos);
 	*(pixel_buffer) = (u32)color;
+}
+
+int abs(int value)
+{
+    u32 temp = value >> 31;     // make a mask of the sign bit
+    value ^= temp;                   // toggle the bits if value is negative
+    value += temp & 1;               // add one if value was negative
+    return value;
+}
+
+int sgn(int val) {
+    return ((0 < val) - (val < (0)));
 }
 
 static void drawLine(Line* line, TetrisColor color, Screen* active_screen) {
@@ -112,7 +70,7 @@ static void drawLine(Line* line, TetrisColor color, Screen* active_screen) {
 //Creates a 10x10 block at the given coordinates
 static void drawBlock(Point p1, u8 size, TetrisColor color, Screen* screen)
 {
-	Point p2 = {p1.x + size, p2.y + size};
+	Point p2 = {p1.x + size, p1.y + size};
     Rectangle rect = {p1, p2};
 	u32 color_bias=0;
 	for (rect.p1.y = p1.y; rect.p1.y < rect.p2.y; rect.p1.y++) {
