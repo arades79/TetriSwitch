@@ -17,7 +17,7 @@ void setupGrid()
 	}
 }
 
-void prepareGrid(Tetromino *piece, u8 block_size, Screen* active_screen)
+void drawNextPieceGrid(Tetromino *piece, u8 block_size, Screen* active_screen)
 {
     Point block;
 	for (int i = 0; i < 4; i++) {
